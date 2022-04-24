@@ -1,13 +1,4 @@
-const properties = require('./json/properties.json');
-const users = require('./json/users.json');
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  user: 'vagrant',
-  password: '123',
-  host: 'localhost',
-  database: 'lightbnb'
-});
+const db = require('./db/index');
 
 /// Users
 
@@ -17,17 +8,7 @@ const pool = new Pool({
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithEmail = function(email) {
-/*   let user;
-  for (const userId in users) {
-    user = users[userId];
-    if (user.email.toLowerCase() === email.toLowerCase()) {
-      break;
-    } else {
-      user = null;
-    }
-  }
-  return Promise.resolve(user); */
-  return pool
+  return db
   .query(`SELECT * FROM users WHERE users.email = $1`, [email])
   .then(res => res.rows[0] || null)
   .catch(err => console.error('query error', err));
@@ -40,8 +21,7 @@ exports.getUserWithEmail = getUserWithEmail;
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithId = function(id) {
-  /* return Promise.resolve(users[id]); */
-  return pool
+  return db
   .query(`SELECT * FROM users WHERE users.id = $1`, [id])
   .then(res => res.rows[0] || null)
   .catch(err => console.error('query error', err));
@@ -55,10 +35,6 @@ exports.getUserWithId = getUserWithId;
  * @return {Promise<{}>} A promise to the user.
  */
 const addUser =  function(user) {
-/*   const userId = Object.keys(users).length + 1;
-  user.id = userId;
-  users[userId] = user;
-  return Promise.resolve(user); */
   const queryString = `
     INSERT INTO users (name, email, password)
     VALUES ($1, $2, $3)
@@ -66,7 +42,7 @@ const addUser =  function(user) {
   `;
   const values = [user.name, user.email, user.password];
 
-  return pool
+  return db
   .query(queryString, values)
   .then(res => res.rows[0])
   .catch(err => console.error('query error', err));
@@ -92,7 +68,7 @@ const getAllReservations = function(guest_id, limit = 10) {
   ORDER BY reservations.start_date
   LIMIT $2;`
   const values = [guest_id, limit];
-  return pool
+  return db
   .query(queryString, values)
   .then(res => res.rows)
   .catch(err => console.error('query error', err));
@@ -164,7 +140,7 @@ const getAllProperties = function(options, limit = 10) {
 
   console.log(queryString, queryParams);
 
-  return pool
+  return db
   .query(queryString, queryParams)
   .then((res) => res.rows)
   .catch(err => console.error('query error', err));
@@ -178,10 +154,6 @@ exports.getAllProperties = getAllProperties;
  * @return {Promise<{}>} A promise to the property.
  */
 const addProperty = function(property) {
-/*   const propertyId = Object.keys(properties).length + 1;
-  property.id = propertyId;
-  properties[propertyId] = property;
-  return Promise.resolve(property); */
   const queryString = `
   INSERT INTO properties(owner_id, title, description, thumbnail_photo_url, cover_photo_url, cost_per_night, street, city, province, post_code, country, parking_spaces, number_of_bathrooms, number_of_bedrooms)
   VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
