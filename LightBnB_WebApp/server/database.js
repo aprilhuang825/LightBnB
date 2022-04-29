@@ -57,7 +57,6 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function(guest_id, limit = 10) {
-  /* return getAllProperties(null, 2); */
   const queryString = `
   SELECT reservations.*, properties.*, avg(rating) as average_rating
   FROM reservations
@@ -138,8 +137,6 @@ const getAllProperties = function(options, limit = 10) {
   LIMIT $${queryParams.length};
   `;
 
-  console.log(queryString, queryParams);
-
   return db
   .query(queryString, queryParams)
   .then((res) => res.rows)
@@ -160,7 +157,8 @@ const addProperty = function(property) {
   RETURNING *;
   `
   const queryParams = [property.owner_id, property.title, property.description, property.thumbnail_photo_url, property.cover_photo_url, property.cost_per_night, property.street, property.city, property.province, property.post_code, property.country, property.parking_spaces, property.number_of_bathrooms, property.number_of_bedrooms]
-  return pool
+  
+  return db
   .query(queryString, queryParams)
   .then((res) => res.rows[0])
   .catch(err => console.error('query error', err));
