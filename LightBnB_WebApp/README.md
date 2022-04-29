@@ -41,3 +41,31 @@
   * `apiRoutes.js` and `userRoutes.js` are responsible for any HTTP requests to `/users/something` or `/api/something`. 
   * `json` is a directory that contains a bunch of dummy data in `.json` files.
   * `database.js` is responsible for all queries to the database. It doesn't currently connect to any database, all it does is return data from `.json` files.
+
+## ERD
+!["picture of ERD"](https://github.com/aprilhuang825/LightBnB/blob/master/LightBnB_WebApp/pics/ERD.png)
+  
+## Getting Started
+
+1. Clone the repository onto your local device.
+2. Create a database called lightbnb from the psql terminal.
+3. In psql run `\i migrations/01_schema.sql` to create the tables,run `\i seeds/02_seeds.sql` to add data.
+4. Install dependencies using the `npm install` command.
+5. Start the web server using the `npm run local` command. The app will be served at <http://localhost:3000/>.
+6. Go to <http://localhost:3000/> in your browser.
+
+## Dependencies
+
+- Express
+- Node 5.10.x or above
+- bcrypt
+- cookie-session
+- body-parser
+- nodemon
+- pg
+
+## Screenshots
+
+!["Screenshot of my reservations page"](https://github.com/aprilhuang825/LightBnB/blob/master/LightBnB_WebApp/pics/My%20reservations.png)
+!["Screenshot of create listing page"](https://github.com/aprilhuang825/LightBnB/blob/master/LightBnB_WebApp/pics/Create%20Listing.png)
+!["Screenshot search page"](https://github.com/aprilhuang825/LightBnB/blob/master/LightBnB_WebApp/pics/Search%20page.png)
